@@ -4,6 +4,9 @@ import SearchBar from "./SearchBar/SearchBar";
 import ImageGallery from "./ImageGallery/ImageGallery";
 import ErrorMessage from "./ErrorMessage/ErrorMessage";
 import ImageModal from "./ImageModal/ImageModal";
+import Loader from "./Loader/Loader";
+import LoadMoreBtn from "./LoadMoreBtn/LoadMoreBtn";
+import { API_KEY } from "../config/config";
 import styles from "./App.module.css";
 
 const App = () => {
@@ -15,10 +18,9 @@ const App = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(null);
 
-  const fetchImages = async () => {
-    const API_KEY = import.meta.env.VITE_UNSPLASH_ACCESS_KEY;
-    const BASE_URL = "https://api.unsplash.com/search/photos";
+  const BASE_URL = "https://api.unsplash.com/search/photos";
 
+  const fetchImages = async () => {
     try {
       setIsLoading(true);
       const { data } = await axios.get(BASE_URL, {
@@ -78,11 +80,9 @@ const App = () => {
       <SearchBar onSubmit={handleSearch} />
       {error && <ErrorMessage message={error} />}
       <ImageGallery images={images} onImageClick={handleImageClick} />
-      {isLoading && <div className={styles.loader}>Loading...</div>}
+      {isLoading && <Loader />}
       {images.length > 0 && !isLoading && (
-        <button className={styles.button} onClick={handleLoadMore}>
-          Load More
-        </button>
+        <LoadMoreBtn onClick={handleLoadMore} />
       )}
       {selectedImage && (
         <ImageModal
